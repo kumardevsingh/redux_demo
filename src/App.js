@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {connect} from 'react-redux';
+import {action_changeName, action_addWish} from './actions/actions';
 
-function App() {
+function App(props) {
+  console.log("props",props);
+  const wishes = props.wishes.map(item =>{
+  return <p>{item}</p>
+  })
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>name: {props.name}</h1>
+      {wishes}
+      <button onClick={() => {props.changeName()}}>Change name</button>
+      <button onClick={() => {props.addWish()}}>Add Wish</button>
     </div>
   );
 }
+const mapStateProps = (state) =>{
+  return {
+    name: state.name,
+    wishes: state.wish
+  }
+}
 
-export default App;
+const mapDispatchProps = (dispatch) => {  
+  return {
+    //changeName: (name)=>{dispatch(action_changeName(name)) }
+    changeName: ()=>{dispatch(action_changeName()) },
+    addWish: () =>{ dispatch(action_addWish())}
+  }
+
+}
+
+export default connect(mapStateProps, mapDispatchProps)(App);

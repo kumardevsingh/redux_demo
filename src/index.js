@@ -4,9 +4,24 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import {createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import {Provider} from 'react-redux';
+import {nameReducer} from './reducers/nameReducer';
+import{wishReducer} from './reducers/wishReducer';
+import thunk from 'redux-thunk';
+
+const masterReduser = combineReducers({
+  "name":nameReducer,
+  "wish" : wishReducer
+}) 
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(masterReduser,{name:'name not found',wish:['eat']},composeEnhancers(applyMiddleware(thunk)));
+console.log(store.getState());
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+   <Provider store = {store}><App /></Provider> 
   </React.StrictMode>,
   document.getElementById('root')
 );
